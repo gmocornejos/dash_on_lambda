@@ -1,5 +1,5 @@
 
-from utils import dash_response
+from .utils import dash_response
 
 
 def simple_hander(dash_app):

@@ -1,7 +1,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 DESCRIPTION = "Easily deploy Plotly Dash apps on AWS Lambda"
 LONG_DESCRIPTION = "Minimal serving layer for Plotly Dash apps deployed on AWS Lambda, following the Serverless Application Model (SAM)"
 
