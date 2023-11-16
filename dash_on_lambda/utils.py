@@ -1,6 +1,8 @@
 
 import os
 import base64
+from dataclasses import dataclass
+from typing import Dict, List
 
 def cognito_login_url():
     login_url_params = {
@@ -12,6 +14,16 @@ def cognito_login_url():
     login_url_base = f"https://{os.environ['COGNITO_DOMAIN']}.auth.{os.environ['COGNITO_REGION']}.amazoncognito.com/oauth2/authorize"
     login_url_query = '&'.join([f"{k}={v}" for k, v in login_url_params.items()])
     return login_url_base + '?' + login_url_query
+
+
+@dataclass
+class HttpApiRequest:
+    method: str
+    path: str
+    query: Dict[str, str]
+    headers: List[str]
+    cookies: Dict[str, str]
+    payload: str
 
 
 def unpack_request(event, context):
@@ -31,14 +43,14 @@ def unpack_request(event, context):
     except KeyError:
         payload = ""
 
-    return {
-        "method": method,
-        "path": path,
-        "query": query,
-        "headers": headers,
-        "cookies": cookies,
-        "payload": payload
-    }
+    return HttpApiRequest(
+        method,
+        path,
+        query,
+        headers,
+        cookies,
+        payload
+    )
 
 
 def pack_response(response):
@@ -71,12 +83,12 @@ def pack_response(response):
         }
 
 
-def dash_response(dash_app_client, request):
+def dash_response(dash_app_client, request: HttpApiRequest):
     response = dash_app_client.open(
-        path=request["path"],
-        method=request["method"],
-        headers=request["headers"],
-        data=request["payload"]
+        path=request.path,
+        method=request.method,
+        headers=request.headers,
+        data=request.payload
     )
     return pack_response(response)
 

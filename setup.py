@@ -13,7 +13,10 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "requests",
+        "pyjwt[crypto]"
+    ],
     keywords=["Plotly Dash", "AWS Lambda", "AWS Cognito"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
