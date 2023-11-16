@@ -82,7 +82,7 @@ def oauth_validate_response(app_client, event, context):
     request = unpack_request(event, context)
     if "access_token" in request.cookies:
         if validate_tokens(request.cookies["access_token"], request.cookies["id_token"]):
-            return dash_response(app_client)
+            return dash_response(app_client, request)
         else:
             return redirect_to_index(request.path)
     else:
