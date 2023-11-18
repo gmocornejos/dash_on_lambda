@@ -1,6 +1,10 @@
 
 from .utils import simple_response
-from .oauth_flow import oauth_flow_response, oauth_validate_response
+from .oauth_flow import (
+    oauth_flow_response,
+    oauth_validate_response,
+    oauth_logout
+)
 
 
 def simple_handler(dash_app):
@@ -17,3 +21,7 @@ def oauth_flow_handler(public_app, private_app):
 def oauth_validate_handler(dash_app):
     dash_app = dash_app.server.test_client()
     return lambda event, context: oauth_validate_response(dash_app, event, context)
+
+
+def oauth_logout_handler():
+    return lambda event, context: oauth_logout()

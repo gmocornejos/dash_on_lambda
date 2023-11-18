@@ -42,7 +42,7 @@ def exchange_code_for_tokens(code, cookies):
             f"refresh_token={response_body['refresh_token']}; HttpOnly; Secure; SameSite=Lax"
         ] + path_token,
         "isBase64Encoded": False,
-        "statusCode": 302,
+        "statusCode": 303,
         "headers": {"Location": redirect_path},
         "body": ""
     }
@@ -73,7 +73,7 @@ def redirect_to_index(after_oauth_flow_path):
             f"oauth_redirect_to={after_oauth_flow_path}; HttpOnly; Secure; SameSite=Lax; path=/"
         ],
         "isBase64Encoded": False,
-        "statusCode": 302,
+        "statusCode": 303,
         "headers": {"Location": "/"},
         "body": "" 
     }
@@ -89,3 +89,17 @@ def oauth_validate_response(app_client, event, context):
             return redirect_to_index(request.path)
     else:
         return redirect_to_index(request.path)
+    
+
+def oauth_logout():
+    return {
+        "cookies": [
+            f"id_token=invalid; HttpOnly; Secure; SameSite=Lax; expires=Thu, 01 Jan 1970 00:00:00 GMT",
+            f"access_token=invalid; HttpOnly; Secure; SameSite=Lax; expires=Thu, 01 Jan 1970 00:00:00 GMT",
+            f"refresh_token=invalid; HttpOnly; Secure; SameSite=Lax; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+        ],
+        "isBase64Encoded": False,
+        "statusCode": 303,
+        "headers": {"Location": "/"},
+        "body": "" 
+    }

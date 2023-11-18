@@ -1,4 +1,9 @@
 
-from .utils import cognito_login_url
+from .oauth_utils import cognito_login_url, cognito_logout_url
 
-from .handlers import simple_handler, oauth_flow_handler, oauth_validate_handler
+from .handlers import (
+    simple_handler,
+    oauth_flow_handler,
+    oauth_validate_handler,
+    oauth_logout_handler
+)

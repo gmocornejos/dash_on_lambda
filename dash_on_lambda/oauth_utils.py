@@ -16,6 +16,28 @@ issuer_url = f"https://cognito-idp.{os.environ['COGNITO_REGION']}.amazonaws.com/
 jwks_client = PyJWKClient(f"{issuer_url}/.well-known/jwks.json")
 
 
+def cognito_login_url():
+    login_url_params = {
+        "client_id": os.environ["COGNITO_CLIENT_ID"],
+        "response_type": "code",
+        "scope": "email+openid+profile",
+        "redirect_uri": os.environ["APP_URL"]
+    }
+    login_url_base = f"https://{os.environ['COGNITO_DOMAIN']}.auth.{os.environ['COGNITO_REGION']}.amazoncognito.com/oauth2/authorize"
+    login_url_query = '&'.join([f"{k}={v}" for k, v in login_url_params.items()])
+    return login_url_base + '?' + login_url_query
+
+
+def cognito_logout_url():
+    logout_url_params = {
+        "client_id": os.environ["COGNITO_CLIENT_ID"],
+        "logout_uri": os.environ["APP_URL"] + "logout"
+    }
+    logout_url_base = f"https://{os.environ['COGNITO_DOMAIN']}.auth.{os.environ['COGNITO_REGION']}.amazoncognito.com/logout"
+    logout_url_query = '&'.join([f"{k}={v}" for k, v in logout_url_params.items()])
+    return logout_url_base + '?' + logout_url_query
+
+
 def decode_tokens(access_token, id_token):
     try:
         access_key = jwks_client.get_signing_key_from_jwt(access_token)
