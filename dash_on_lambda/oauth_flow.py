@@ -3,7 +3,7 @@ import os
 import requests
 
 from .utils import unpack_request, dash_response, HttpApiRequest
-from .oauth_utils import validate_tokens
+from .oauth_utils import validate_tokens, id_token_to_header
 
 
 def exchange_code_for_tokens(code, cookies):
@@ -59,6 +59,7 @@ def oauth_flow_response(public_app_client, private_app_client, event, context):
     request = unpack_request(event, context)
     if "access_token" in request.cookies:
         if validate_tokens(request.cookies["access_token"], request.cookies["id_token"]):
+            request = id_token_to_header(request)
             return dash_response(private_app_client, request)
         else:
             return unauthorized_response(public_app_client, request)
@@ -82,6 +83,7 @@ def oauth_validate_response(app_client, event, context):
     request = unpack_request(event, context)
     if "access_token" in request.cookies:
         if validate_tokens(request.cookies["access_token"], request.cookies["id_token"]):
+            request = id_token_to_header(request)
             return dash_response(app_client, request)
         else:
             return redirect_to_index(request.path)

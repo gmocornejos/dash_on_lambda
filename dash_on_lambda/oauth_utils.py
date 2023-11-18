@@ -88,3 +88,10 @@ def validate_tokens(access_token, id_token):
         return False
     else:
         return True
+    
+
+def id_token_to_header(request, fields=["sub", "nickname", "email"]):
+    tokens = decode_tokens(request.cookies["access_token"], request.cookies["id_token"])
+    for field in fields:
+        request.headers[field] = tokens["id_token"][field]
+    return request
