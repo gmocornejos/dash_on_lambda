@@ -28,6 +28,18 @@ def cognito_login_url():
     return login_url_base + '?' + login_url_query
 
 
+def cognito_signup_url():
+    login_url_params = {
+        "client_id": os.environ["COGNITO_CLIENT_ID"],
+        "response_type": "code",
+        "scope": "email+openid+profile",
+        "redirect_uri": os.environ["APP_URL"]
+    }
+    login_url_base = f"https://{os.environ['COGNITO_DOMAIN']}.auth.{os.environ['COGNITO_REGION']}.amazoncognito.com/signup"
+    login_url_query = '&'.join([f"{k}={v}" for k, v in login_url_params.items()])
+    return login_url_base + '?' + login_url_query
+
+
 def cognito_logout_url():
     logout_url_params = {
         "client_id": os.environ["COGNITO_CLIENT_ID"],
